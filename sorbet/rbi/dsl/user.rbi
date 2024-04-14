@@ -33,9 +33,8 @@ class User
     sig { params(operation: Symbol, column_name: T.any(String, Symbol)).returns(Numeric) }
     def calculate(operation, column_name); end
 
-    sig { params(column_name: T.nilable(T.any(String, Symbol))).returns(Integer) }
-    sig { params(column_name: NilClass, block: T.proc.params(object: ::User).void).returns(Integer) }
-    def count(column_name = nil, &block); end
+    sig { params(column_name: T.untyped).returns(Integer) }
+    def count(column_name = nil); end
 
     sig { params(attributes: T.untyped, block: T.nilable(T.proc.params(object: ::User).void)).returns(::User) }
     def create(attributes = nil, &block); end
@@ -71,8 +70,7 @@ class User
         args: T::Array[T.any(String, Symbol, ::ActiveSupport::Multibyte::Chars, T::Boolean, BigDecimal, Numeric, ::ActiveRecord::Type::Binary::Data, ::ActiveRecord::Type::Time::Value, Date, Time, ::ActiveSupport::Duration, T::Class[T.anything])]
       ).returns(T::Enumerable[::User])
     end
-    sig { params(args: NilClass, block: T.proc.params(object: ::User).void)).returns(T.nilable(::User)) }
-    def find(args = nil, &block); end
+    def find(args); end
 
     sig { params(args: T.untyped).returns(T.nilable(::User)) }
     def find_by(*args); end
@@ -741,6 +739,51 @@ class User
     sig { void }
     def id_will_change!; end
 
+    sig { returns(T.nilable(::String)) }
+    def image; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def image=(value); end
+
+    sig { returns(T::Boolean) }
+    def image?; end
+
+    sig { returns(T.nilable(::String)) }
+    def image_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def image_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def image_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def image_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def image_change_to_be_saved; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def image_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def image_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def image_previous_change; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def image_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def image_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def image_was; end
+
+    sig { void }
+    def image_will_change!; end
+
     sig { void }
     def restore_created_at!; end
 
@@ -758,6 +801,9 @@ class User
 
     sig { void }
     def restore_id_value!; end
+
+    sig { void }
+    def restore_image!; end
 
     sig { void }
     def restore_updated_at!; end
@@ -797,6 +843,12 @@ class User
 
     sig { returns(T::Boolean) }
     def saved_change_to_id_value?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_image; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_image?; end
 
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def saved_change_to_updated_at; end
@@ -866,6 +918,9 @@ class User
 
     sig { returns(T::Boolean) }
     def will_save_change_to_id_value?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_image?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_updated_at?; end

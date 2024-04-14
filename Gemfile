@@ -77,6 +77,6 @@ gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 gem "sorbet", group: :development
 gem "sorbet-runtime", group: :development
-gem "tapioca", require: false, group: %i[development test]
+gem "tapioca", "0.13.1", require: false, group: %i[development test]
 gem "rufo"
 gem "erb-formatter"
