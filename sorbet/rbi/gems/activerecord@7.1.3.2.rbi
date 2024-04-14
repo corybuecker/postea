@@ -34385,6 +34385,70 @@ class ActiveRecord::SerializationFailure < ::ActiveRecord::TransactionRollbackEr
 # source://activerecord//lib/active_record/errors.rb#41
 class ActiveRecord::SerializationTypeMismatch < ::ActiveRecord::ActiveRecordError; end
 
+module ActiveRecord::SessionStore; end
+
+class ActiveRecord::SessionStore::Session < ::ActiveRecord::Base
+  # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#57
+  def initialize(*_arg0); end
+
+  # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#63
+  def data; end
+
+  # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#67
+  def data=(_arg0); end
+
+  # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#14
+  def data_column_name; end
+
+  # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#14
+  def data_column_name=(val); end
+
+  # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#70
+  def loaded?; end
+
+  # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#80
+  def secure!; end
+
+  private
+
+  # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#106
+  def raise_on_session_data_overflow!; end
+
+  # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#96
+  def serialize_data!; end
+
+  class << self
+    # source://activesupport/7.1.3.2/lib/active_support/callbacks.rb#70
+    def __callbacks; end
+
+    # source://activemodel/7.1.3.2/lib/active_model/validations.rb#71
+    def _validators; end
+
+    # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#14
+    def data_column_name; end
+
+    # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#14
+    def data_column_name=(val); end
+
+    # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#21
+    def data_column_size_limit; end
+
+    # source://activerecord//lib/active_record/enum.rb#167
+    def defined_enums; end
+
+    # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#26
+    def find_by_session_id(session_id); end
+
+    private
+
+    # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#32
+    def session_id_column; end
+
+    # source://activerecord-session_store/2.1.0/lib/active_record/session_store/session.rb#37
+    def setup_sessid_compatibility!; end
+  end
+end
+
 # = Active Record Signed Id
 #
 # source://activerecord//lib/active_record/signed_id.rb#5
