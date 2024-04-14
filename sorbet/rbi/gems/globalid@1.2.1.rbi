@@ -595,6 +595,8 @@ class URI::GID < ::URI::Generic
   # params like "key=first_value&key=last_value" key will only be last_value.
   #
   # Read the documentation for +parse+, +create+ and +build+ for more.
+  #
+  # source://uri/0.13.0/lib/uri/generic.rb#243
   def app; end
 
   # source://globalid//lib/global_id/uri/gid.rb#107
