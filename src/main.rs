@@ -1,4 +1,4 @@
-use deadpool_postgres::{Config, Pool};
+use deadpool_postgres::Pool;
 use tokio::signal::unix::SignalKind;
 use tokio_postgres::NoTls;
 use tower_http::trace::TraceLayer;
@@ -7,6 +7,7 @@ use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitEx
 
 #[derive(Clone)]
 struct ApplicationState {
+    #[allow(dead_code)]
     pool: Pool,
 }
 
@@ -24,8 +25,10 @@ async fn main() {
     let database_url = std::env::var("DATABASE_URL")
         .unwrap_or_else(|_| "postgres://postea@localhost:5432/postea".to_string());
 
-    let mut pg_config = Config::default();
-    pg_config.dbname = Some(database_url);
+    let pg_config = deadpool_postgres::Config {
+        dbname: Some(database_url),
+        ..Default::default()
+    };
     let pool = pg_config
         .builder(NoTls)
         .unwrap()
