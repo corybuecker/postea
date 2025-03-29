@@ -1,9 +1,15 @@
+mod models;
+mod parsers;
+mod utils;
+
+use anyhow::{Result, anyhow};
 use deadpool_postgres::Pool;
+use models::Feed;
+use parsers::sync_feed;
 use tokio::signal::unix::SignalKind;
 use tokio_postgres::NoTls;
 use tower_http::trace::TraceLayer;
-use tracing::level_filters::LevelFilter;
-use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
+use utils::initialize_logging;
 
 #[derive(Clone)]
 struct ApplicationState {
@@ -12,21 +18,13 @@ struct ApplicationState {
 }
 
 #[tokio::main]
-async fn main() {
-    tracing_subscriber::registry()
-        .with(tracing_subscriber::fmt::layer().pretty())
-        .with(
-            EnvFilter::builder()
-                .with_default_directive(LevelFilter::DEBUG.into())
-                .from_env_lossy(),
-        )
-        .init();
+async fn main() -> Result<()> {
+    initialize_logging();
 
     let database_url = std::env::var("DATABASE_URL")
         .unwrap_or_else(|_| "postgres://postea@localhost:5432/postea".to_string());
-
     let pg_config = deadpool_postgres::Config {
-        dbname: Some(database_url),
+        url: Some(database_url),
         ..Default::default()
     };
     let pool = pg_config
@@ -36,17 +34,24 @@ async fn main() {
         .build()
         .unwrap();
 
-    let state = ApplicationState { pool };
-
+    let state = ApplicationState { pool: pool.clone() };
     let app = axum::Router::new().with_state(state);
     let app = app.layer(TraceLayer::new_for_http());
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8000").await.unwrap();
+    let connection = pool.get().await?;
+    let feed: Feed = connection
+        .query_one("SELECT * FROM feeds LIMIT 1", &[])
+        .await?
+        .try_into()?;
+    sync_feed(&feed).await;
 
     axum::serve(listener, app)
         .with_graceful_shutdown(shutdown())
         .await
         .unwrap();
+
+    Ok(())
 }
 
 async fn shutdown() {
